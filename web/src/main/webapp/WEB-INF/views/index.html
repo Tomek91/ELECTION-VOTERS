@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>MAIN PAGE</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+</head>
+<body>
+
+    <div class="container">
+        <h1 class="jumbotron display-1 text-primary text-center">ELECTION VOTERS APP</h1>
+        <div th:if="${!(electionFirstTour and !electionFirstTourResults) and !(electionSecondTour and !electionSecondTourResults)}">
+            <h4 class="text-center">ELECTION DOESN'T START</h4>
+        </div>
+        <div class="row">
+            <div class="col-8 offset-2" th:if="${(electionFirstTour and !electionFirstTourResults) or (electionSecondTour and !electionSecondTourResults)}">
+                <div th:if="${electionFirstTour and !electionFirstTourResults}">
+                    <h4 class="text-center">FIRST TOUR ELECTION</h4>
+                </div>
+                <div th:if="${electionSecondTour and !electionSecondTourResults}">
+                    <h4 class="text-center">SECOND TOUR ELECTION</h4>
+                </div>
+                <div th:if="${!errorsGlobal.isEmpty()}">
+                    <h3 class="text-danger text-center" th:each="e : ${errorsGlobal}" th:text="${e}"></h3>
+                </div>
+                <form th:action="@{/}" method="post" th:object="${auth}">
+                    <div class="form-group">
+                        <label for="pesel">PESEL</label>
+                        <input id="pesel" type="text" class="form-control" placeholder="pesel" th:field="*{pesel}"/>
+                    </div>
+                    <div th:if="${errors.containsKey('pesel')}">
+                        <p class="text-danger" th:text="${errors.get('pesel')}"></p>
+                    </div>
+                    <div class="form-group">
+                        <label for="token">TOKEN</label>
+                        <input id="token" type="text" class="form-control" placeholder="token" th:field="*{token}"/>
+                    </div>
+                    <div th:if="${errors.containsKey('token')}">
+                        <p class="text-danger" th:text="${errors.get('token')}"></p>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-success" type="submit">Login</button>
+                        <button class="btn btn-danger" type="reset">Reset</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    </body>
+</html>
